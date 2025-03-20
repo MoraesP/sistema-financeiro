@@ -5,6 +5,7 @@ import { HamburgerMenuIcon } from "@/components/icons/HamburgerMenuIcon";
 import { Logo } from "@/components/icons/Logo";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ModalLogin } from "../modal-login/ModalLogin";
 
 export const experimental_ppr = true;
 
@@ -42,6 +43,7 @@ export function UnauthenticatedHeader() {
             <Button buttonType="regular" variant="secondary">
               Abrir minha conta
             </Button>
+            <ModalLogin />
             <Button
               buttonType="outlined"
               variant="secondary"

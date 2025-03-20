@@ -3,14 +3,20 @@
 import DropdownMenu from "@/components/moleculas/dropdown-menu/DropdownMenu";
 import { updatePage } from "@/lib/actions";
 import { useInvoiceProvider } from "@/lib/invoices-context";
+import { TransactionType } from "@/models/TransationType";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import http from "@http";
 import "./NewTransactionCard.styles.css";
 
 export function NewTransactionCard() {
   const { usePostInvoice } = useInvoiceProvider();
   const postInvoice = usePostInvoice;
+
+  const [transactionTypes, setTransactionTypes] = useState<TransactionType[]>(
+    []
+  );
 
   const [newInvoice, setNewInvoice] = useState({
     id: uuidv4(),
@@ -50,6 +56,12 @@ export function NewTransactionCard() {
     });
   };
 
+  useEffect(() => {
+    http.get<TransactionType[]>("transactions/types").then((response) => {
+      setTransactionTypes(response.data);
+    });
+  }, []);
+
   return (
     <div
       id="new-transaction"
@@ -77,7 +89,7 @@ export function NewTransactionCard() {
             <DropdownMenu
               selected={newInvoice.type}
               setSelected={onChangeType}
-              options={["Depósito", "Saque", "Transferência"]}
+              options={transactionTypes}
               placeholder="Selecione o tipo de transação"
             ></DropdownMenu>
             <div className="grid gap-2">

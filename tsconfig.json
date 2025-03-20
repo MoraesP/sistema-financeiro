@@ -23,10 +23,11 @@
     ],
     "paths": {
       "@/*": [
-        "./src/*"
-      ]
+        "./src/*",
+      ],
+      "@http": ["./src/http/index.js"]
     },
-    "target": "ES2017"
+    "target": "ES2017",
   },
   "include": [
     "next-env.d.ts",
@@ -34,7 +35,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/atoms/button/Button.storybook"
-  ],
+, "src/http/index.js"  ],
   "exclude": [
     "node_modules"
   ]

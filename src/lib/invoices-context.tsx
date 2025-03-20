@@ -1,46 +1,19 @@
 "use client";
+
 import { createContext, useContext, useState } from "react";
 
 export interface Invoice {
   id: string;
   type: string;
   value: number;
-  date: Date;
+  date: string; // Armazena como string para evitar erro de hidratação
 }
 
 const invoicesMock: Invoice[] = [
-  {
-    id: "4",
-    type: "Saque",
-    value: 600.0,
-    date: new Date(
-      "Sat Oct 19 2024 16:24:42 GMT-0300 (Hora padrão de Brasília)"
-    ),
-  },
-  {
-    id: "3",
-    type: "Depósito",
-    value: 250.0,
-    date: new Date(
-      "Sat Jun 01 2024 16:24:42 GMT-0300 (Hora padrão de Brasília)"
-    ),
-  },
-  {
-    id: "2",
-    type: "Saque",
-    value: 300.0,
-    date: new Date(
-      "Mon Apr 08 2024 16:24:42 GMT-0300 (Hora padrão de Brasília)"
-    ),
-  },
-  {
-    id: "1",
-    type: "Depósito",
-    value: 300.0,
-    date: new Date(
-      "Mon Apr 01 2024 16:24:42 GMT-0300 (Hora padrão de Brasília)"
-    ),
-  },
+  { id: "4", type: "Saque", value: 600.0, date: "2024-10-19" },
+  { id: "3", type: "Depósito", value: 250.0, date: "2024-06-01" },
+  { id: "2", type: "Saque", value: 300.0, date: "2024-04-08" },
+  { id: "1", type: "Depósito", value: 300.0, date: "2024-04-01" },
 ];
 
 const InvoiceContext = createContext<{
@@ -50,33 +23,24 @@ const InvoiceContext = createContext<{
   usePatchInvoice: (invoice: Invoice) => void,
   useDeleteInvoice: (id: string) => void,
     } | undefined>(undefined);
-    
 
-export function InvoiceProvider({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const [invoices, setInvoices] = useState(invoicesMock);
+export function InvoiceProvider({ children }: { children: React.ReactNode }) {
+  const [invoices, setInvoices] = useState<Invoice[]>(invoicesMock);
 
-  const useGetInvoice = (id: string) => {
-    const invoice = invoicesMock.find((i) => i.id === id);
-    return invoice;
-  };
+  const useGetInvoice = (id: string) => invoices.find((i) => i.id === id);
 
   const usePostInvoice = (invoice: Invoice) => {
-    invoicesMock.unshift(invoice);
+    setInvoices((prev) => [invoice, ...prev]); // Atualiza estado corretamente
   };
 
   const usePatchInvoice = (invoice: Invoice) => {
-    setInvoices((prev) => {
-      const editInvoice = prev.find((i) => i.id === invoice.id);
-      if (editInvoice) Object.assign(editInvoice, invoice);
-      return prev;
-    });
+    setInvoices((prev) =>
+      prev.map((i) => (i.id === invoice.id ? { ...i, ...invoice } : i))
+    );
   };
 
   const useDeleteInvoice = (id: string) => {
-    const index = invoicesMock.findIndex((i) => i.id === id);
-    if (index >= 0) invoicesMock.splice(index, 1);
+    setInvoices((prev) => prev.filter((i) => i.id !== id));
   };
 
   return (

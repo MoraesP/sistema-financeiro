@@ -3,11 +3,12 @@
 import { ArrowDownIcon } from "@/components/icons/ArrowDownIcon";
 import { useEffect, useRef, useState } from "react";
 import "./DropdownMenu.styles.css";
+import { TransactionType } from "@/models/TransationType";
 
 export type DropdownMenuProps = {
   selected: string;
   setSelected: (option: string) => void;
-  options: string[];
+  options: TransactionType[];
   placeholder: string;
 };
 
@@ -29,7 +30,6 @@ function DropdownMenu({
         setIsActive(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -44,16 +44,16 @@ function DropdownMenu({
       </div>
       {isActive && (
         <div className="dropdown-content">
-          {options.map((option, index) => (
+          {options.map((option) => (
             <div
-              key={index}
+              key={option.value}
               className="dropdown-item"
               onClick={() => {
-                setSelected(option);
+                setSelected(option.display);
                 setIsActive(false);
               }}
             >
-              {option}
+              {option.display}
             </div>
           ))}
         </div>

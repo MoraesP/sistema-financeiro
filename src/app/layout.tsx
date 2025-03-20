@@ -21,22 +21,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
-      <InvoiceProvider>
-        <body
-          className={`
-          ${inter.variable}
-          antialiased
-          h-[100vh]
-          w-full
-          bg-secondary-200
-        `}
-        >
-          {children}
-        </body>
-      </InvoiceProvider>
+      <body
+        suppressHydrationWarning={true} //ignora os erros de hidratração
+        className={`
+            ${inter.variable}
+            antialiased
+            h-[100vh]
+            w-full
+            bg-secondary-200
+            `}
+      >
+        <InvoiceProvider>{children}</InvoiceProvider>
+      </body>
     </html>
   );
 }
