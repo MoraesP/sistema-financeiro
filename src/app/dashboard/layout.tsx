@@ -6,7 +6,9 @@ import { Invoice } from "@/components/organisms/invoice/Invoice";
 import { Nav } from "@/components/organisms/nav/Nav";
 import http from "@/http";
 import { DBTransaction, ITransaction } from "@/models/Transaction";
+import { RootState, setUser } from "@/store/store";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Layout({
   children,
@@ -15,6 +17,22 @@ export default function Layout({
 }>) {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [balance, setBalance] = useState<number>(0);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user.user);
+
+  if (!user) {
+    console.log("Preciso procurar usuário");
+    http
+      .get("auth/profile")
+      .then((response) => {
+        dispatch(setUser(response.data));
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Usuário não encontrado", error);
+      });
+  }
 
   function fetchTransactions() {
     http
@@ -58,7 +76,7 @@ export default function Layout({
       <div className="grid gap-6 mt-6 place-self-center lg:grid-cols-[180px_1fr_280px] lg:max-w-[1320px] w-full lg:px-[60px] md:px-[60px] px-6">
         <Nav />
         <div className="grid gap-y-6 w-full">
-          <Balance username="Joana" balance={balance} />
+          <Balance username={user?.name ?? ""} balance={balance} />
           {children}
         </div>
         <Invoice transactions={transactions} />

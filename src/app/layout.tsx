@@ -1,5 +1,8 @@
-import type { Metadata } from "next";
+'use client'
+
+import store from "@/store/store";
 import { Inter } from "next/font/google";
+import { Provider } from "react-redux"; // Importando o Provider do Redux
 import "./globals.css";
 
 export const experimental_ppr = true;
@@ -10,10 +13,10 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Sistema Financeiro - P. Moraes",
-  description: "Postech da FIAP",
-};
+// export const metadata: Metadata = {
+//   title: "Sistema Financeiro - P. Moraes",
+//   description: "Postech da FIAP",
+// };
 
 export default function RootLayout({
   children,
@@ -32,7 +35,7 @@ export default function RootLayout({
             bg-secondary-200
             `}
       >
-        {children}
+        <Provider store={store}>{children}</Provider>
       </body>
     </html>
   );

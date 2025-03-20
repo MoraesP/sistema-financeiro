@@ -23,12 +23,13 @@ export function Invoice({ transactions }: TransactionProps) {
   useEffect(() => {
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = page * itemsPerPage;
-    if (startIndex < sortedTransactions.length) {
-      setVisibleTransactions((prevTransactions) => [
-        ...prevTransactions,
-        ...sortedTransactions.slice(startIndex, endIndex),
-      ]);
-    }
+    const newTransactions = sortedTransactions.slice(startIndex, endIndex);
+
+    setVisibleTransactions((prevTransactions) => [
+      ...prevTransactions,
+      ...newTransactions,
+    ]);
+    
   }, [page, transactions, sortedTransactions]);
 
   const handleScroll = () => {

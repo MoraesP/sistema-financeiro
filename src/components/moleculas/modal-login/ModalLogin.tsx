@@ -3,10 +3,27 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormLogin } from "../form-login/FormLogin";
 import Modal from "../modal/Modal";
+import http from "@/http";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/store";
 
 export const ModalLogin = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const getUserProfile = () => {
+    http
+      .get("auth/profile")
+      .then((response) => {
+        dispatch(setUser(response.data));
+        console.log(response.data);
+        router.push("/dashboard");
+      })
+      .catch((error) => {
+        console.error("Usuário não encontrado", error);
+      });
+  };
 
   return (
     <>
@@ -21,7 +38,7 @@ export const ModalLogin = () => {
         <FormLogin
           onLogin={() => {
             setModalOpen(false);
-            router.push("/dashboard");
+            getUserProfile();
           }}
         />
       </Modal>
