@@ -1,12 +1,13 @@
 import { Button } from "@/components/atoms/button/Button";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormLogin } from "../form-login/FormLogin";
 import Modal from "../modal/Modal";
-import { useRouter } from "next/navigation";
 
 export const ModalLogin = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const router = useRouter();
+
   return (
     <>
       <Button
