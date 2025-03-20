@@ -1,5 +1,5 @@
 export interface TransactionType {
-  value: TransactionTypeValue;
+  value: TransactionTypeValue | null;
   display: string;
 }
 

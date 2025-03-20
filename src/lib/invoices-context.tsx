@@ -9,23 +9,26 @@ export interface Invoice {
   date: string; // Armazena como string para evitar erro de hidratação
 }
 
-const invoicesMock: Invoice[] = [
-  { id: "4", type: "Saque", value: 600.0, date: "2024-10-19" },
-  { id: "3", type: "Depósito", value: 250.0, date: "2024-06-01" },
-  { id: "2", type: "Saque", value: 300.0, date: "2024-04-08" },
-  { id: "1", type: "Depósito", value: 300.0, date: "2024-04-01" },
-];
+interface InvoiceActions {
+  invoices: Invoice[];
+  useGetInvoice: (id: string) => Invoice | undefined;
+  usePostInvoice: (invoice: Invoice) => void;
+  usePatchInvoice: (invoice: Invoice) => void;
+  useDeleteInvoice: (id: string) => void;
+}
+// const invoicesMock: Invoice[] = [
+//   { id: "4", type: "Saque", value: 600.0, date: "2024-10-19" },
+//   { id: "3", type: "Depósito", value: 250.0, date: "2024-06-01" },
+//   { id: "2", type: "Saque", value: 300.0, date: "2024-04-08" },
+//   { id: "1", type: "Depósito", value: 300.0, date: "2024-04-01" },
+// ];
 
-const InvoiceContext = createContext<{
-  invoices: Invoice[],
-  useGetInvoice: (id: string) => Invoice | undefined,
-  usePostInvoice: (invoice: Invoice) => void,
-  usePatchInvoice: (invoice: Invoice) => void,
-  useDeleteInvoice: (id: string) => void,
-    } | undefined>(undefined);
+const InvoiceContext = createContext<
+  InvoiceActions| undefined
+>(undefined);
 
 export function InvoiceProvider({ children }: { children: React.ReactNode }) {
-  const [invoices, setInvoices] = useState<Invoice[]>(invoicesMock);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   const useGetInvoice = (id: string) => invoices.find((i) => i.id === id);
 

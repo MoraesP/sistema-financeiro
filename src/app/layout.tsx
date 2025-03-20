@@ -33,7 +33,7 @@ export default function RootLayout({
             bg-secondary-200
             `}
       >
-        <InvoiceProvider>{children}</InvoiceProvider>
+        |<InvoiceProvider>{children}</InvoiceProvider>
       </body>
     </html>
   );

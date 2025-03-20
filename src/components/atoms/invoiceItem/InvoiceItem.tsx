@@ -9,42 +9,37 @@ import { createContext } from "react";
 import { formatDate } from "@/lib/shared-functions";
 import { updatePage } from "@/lib/actions";
 import { useInvoiceProvider } from "@/lib/invoices-context";
+import { ITransaction } from "@/models/Transaction";
 
 export type InvoiceItemProps = {
-  id: string;
-  type: string;
-  value: number;
-  date: string; // Agora data é string no props
+  transaction: ITransaction;
 };
 
 export const InvoiceContext = createContext({});
 
-export function InvoiceItem({ id, type, value, date }: InvoiceItemProps) {
+export function InvoiceItem({ transaction }: InvoiceItemProps) {
   const { useDeleteInvoice } = useInvoiceProvider();
 
   const deleteInvoice = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useDeleteInvoice(id);
+    useDeleteInvoice(transaction.id);
     updatePage();
   };
-
   // Converte a data para um objeto Date antes de usá-la
-  const parsedDate = new Date(date);
-
   return (
-    <InvoiceContext.Provider value={{ id }}>
+    <InvoiceContext.Provider value={transaction.id}>
       <div className="flex flex-col border-b border-secondary-400 py-3">
         <small className="text-secondary-400 font-bold pb-1">
-          {months[parsedDate.getMonth()]}
+          {months[transaction.createdAt.getMonth()]}
         </small>
 
         <div className="flex flex-row justify-between items-center">
-          <p>{type}</p>
+          <p>{transaction.type}</p>
           <div className="flex gap-2">
             <Link
               href={{
-                pathname: `/dashboard/invoices/${id}/edit`,
-                query: { id },
+                pathname: `/dashboard/invoices/${transaction.id}/edit`,
+                query: `${transaction.id}`,
               }}
             >
               <ButtonIcon Icon={EditIcon} />
@@ -53,8 +48,10 @@ export function InvoiceItem({ id, type, value, date }: InvoiceItemProps) {
           </div>
         </div>
         <div className="flex flex-row justify-between items-center">
-          <p className="font-bold">R$ {value}</p>
-          <small className="text-gray-600">{formatDate(parsedDate)}</small>
+          <p className="font-bold">R$ {transaction.value}</p>
+          <small className="text-gray-600">
+            {formatDate(transaction.createdAt)}
+          </small>
         </div>
       </div>
     </InvoiceContext.Provider>

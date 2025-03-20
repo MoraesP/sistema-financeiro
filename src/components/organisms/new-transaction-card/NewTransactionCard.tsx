@@ -1,59 +1,70 @@
 "use client";
 
 import DropdownMenu from "@/components/moleculas/dropdown-menu/DropdownMenu";
-import { updatePage } from "@/lib/actions";
-import { useInvoiceProvider } from "@/lib/invoices-context";
+import { ITransaction } from "@/models/Transaction";
 import { TransactionType } from "@/models/TransationType";
+import http from "@http";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import http from "@http";
 import "./NewTransactionCard.styles.css";
+import { updatePage } from "@/lib/actions";
 
 export function NewTransactionCard() {
-  const { usePostInvoice } = useInvoiceProvider();
-  const postInvoice = usePostInvoice;
+  const [transactionType, setTransactionType] = useState<TransactionType>({
+    display: "",
+    value: null,
+  });
+  const [transactionValue, setTransactionValue] = useState("");
 
   const [transactionTypes, setTransactionTypes] = useState<TransactionType[]>(
     []
   );
 
-  const [newInvoice, setNewInvoice] = useState({
-    id: uuidv4(),
-    type: "",
-    value: 0,
-    date: new Date(),
-  });
-
-  const onChangeType = (value: string) => {
-    setNewInvoice((prev) => ({ ...prev, type: value }));
+  const createTransacion = (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    http
+      .post("transactions", {
+        type: transactionType.value,
+        value: parseFloat(transactionValue),
+      })
+      .then((response) => {
+        const newTransaction: ITransaction = {
+          id: response.data._id,
+          type: response.data.type,
+          value: response.data.value,
+          createdAt: new Date(response.data.createdAt),
+        };
+        console.log(newTransaction);
+        updatePage();
+        resetForm();
+      });
   };
 
-  const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (!isNaN(Number(value))) {
-      setNewInvoice((prev) => ({ ...prev, value: Number(value) }));
-    }
-  };
+  // const onChangeType = (value: string) => {
+  //   setNewInvoice((prev) => ({ ...prev, type: value }));
+  // };
 
-  const createInvoice = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!newInvoice.type || newInvoice.value === 0) {
-      alert("Por favor, preencha todos os campos corretamente.");
-      return;
-    }
-    postInvoice(newInvoice);
-    updatePage();
-    resetForm();
-  };
+  // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = event.target.value;
+  //   if (!isNaN(Number(value))) {
+  //     setNewInvoice((prev) => ({ ...prev, value: Number(value) }));
+  //   }
+  // };
+
+  // const createInvoice = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   if (!newInvoice.type || newInvoice.value === 0) {
+  //     alert("Por favor, preencha todos os campos corretamente.");
+  //     return;
+  //   }
+  //   postInvoice(newInvoice);
+  //   updatePage();
+  //   resetForm();
+  // };
 
   const resetForm = () => {
-    setNewInvoice({
-      id: uuidv4(),
-      type: "",
-      value: 0,
-      date: new Date(),
-    });
+    setTransactionType({ display: "", value: null });
+    setTransactionValue("");
   };
 
   useEffect(() => {
@@ -85,11 +96,11 @@ export function NewTransactionCard() {
       <div className="grid align-left py-4 lg:grid-cols-2">
         <div className="grid gap-6">
           <h1 className="text-h1 font-bold ">Nova Transação</h1>
-          <form className="grid gap-6" onSubmit={createInvoice}>
+          <form className="grid gap-6" onSubmit={createTransacion}>
             <DropdownMenu
-              selected={newInvoice.type}
-              setSelected={onChangeType}
+              selected={transactionType}
               options={transactionTypes}
+              onChange={setTransactionType}
               placeholder="Selecione o tipo de transação"
             ></DropdownMenu>
             <div className="grid gap-2">
@@ -101,8 +112,8 @@ export function NewTransactionCard() {
                 step="0.01"
                 className="peer block w-[184px] h-[48px] cursor-pointer rounded-md border border-primary-400 py-2 pl-2 text-p text-center outline-2 text-primary-400"
                 placeholder="0"
-                value={newInvoice.value}
-                onChange={onChangeValue}
+                value={transactionValue}
+                onChange={(evt) => setTransactionValue(evt.target.value)}
               />
             </div>
             <button

@@ -6,17 +6,17 @@ import "./DropdownMenu.styles.css";
 import { TransactionType } from "@/models/TransationType";
 
 export type DropdownMenuProps = {
-  selected: string;
-  setSelected: (option: string) => void;
-  options: TransactionType[];
   placeholder: string;
+  selected: TransactionType;
+  options: TransactionType[];
+  onChange: (option: TransactionType) => void;
 };
 
 function DropdownMenu({
-  selected,
-  setSelected,
-  options,
   placeholder,
+  selected,
+  options,
+  onChange,
 }: DropdownMenuProps) {
   const [isActive, setIsActive] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,7 @@ function DropdownMenu({
   return (
     <div className="dropdown" ref={dropdownRef}>
       <div className="dropdown-btn" onClick={() => setIsActive(!isActive)}>
-        {selected === "" ? placeholder : selected}
+        {selected.value ? selected.display : placeholder}
         <ArrowDownIcon />
       </div>
       {isActive && (
@@ -49,7 +49,7 @@ function DropdownMenu({
               key={option.value}
               className="dropdown-item"
               onClick={() => {
-                setSelected(option.display);
+                onChange(option);
                 setIsActive(false);
               }}
             >
