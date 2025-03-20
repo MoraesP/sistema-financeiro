@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { InvoiceProvider } from "@/lib/invoices-context";
 
 export const experimental_ppr = true;
 
@@ -12,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sistema Financeiro - ABPW",
-  description: "Grupo de Pós da FIAP",
+  title: "Sistema Financeiro - P. Moraes",
+  description: "Postech da FIAP",
 };
 
 export default function RootLayout({
@@ -33,7 +32,7 @@ export default function RootLayout({
             bg-secondary-200
             `}
       >
-        |<InvoiceProvider>{children}</InvoiceProvider>
+        {children}
       </body>
     </html>
   );

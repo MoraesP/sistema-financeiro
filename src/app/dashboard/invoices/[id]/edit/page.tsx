@@ -1,43 +1,59 @@
 "use client";
 
 import DropdownMenu from "@/components/moleculas/dropdown-menu/DropdownMenu";
-import { updatePage } from "@/lib/actions";
-import { useInvoiceProvider } from "@/lib/invoices-context";
+import http from "@/http";
+import { TransactionType } from "@/models/TransationType";
 import Image from "next/image";
-import { redirect, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function EditInvoice() {
-  const idParam = useSearchParams();
-  const id = idParam.get("id") || "";
-  const { useGetInvoice, usePatchInvoice } = useInvoiceProvider();
-  const patchInvoice = usePatchInvoice;
-  const invoice = useGetInvoice(id);
+  const editInvoice = { id: "1", type: "saque", value: 100 };
 
-  if(!invoice) redirect('/not-found')
-  
-  const [editInvoice, setEditInvoice] = useState(invoice)
+  const [transactionType, setTransactionType] = useState<TransactionType>({
+    display: "",
+    value: null,
+  });
 
-  const onChangeType = (value: string) => {
-    setEditInvoice((prev) => ({ ...prev, type: value }));
-  };
+  const [transactionTypes, setTransactionTypes] = useState<TransactionType[]>(
+    []
+  );
 
-  const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (!isNaN(Number(value))) {
-      setEditInvoice((prev) => ({ ...prev, value: Number(value) }));
-    }
-  };
+  // const idParam = useSearchParams();
+  // const id = idParam.get("id") || "";
+  // const { useGetInvoice, usePatchInvoice } = useInvoiceProvider();
+  // const patchInvoice = usePatchInvoice;
+  // const invoice = useGetInvoice(id);
 
-  const updateInvoice = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!editInvoice.type || editInvoice.value === 0) {
-      alert("Por favor, preencha todos os campos corretamente.");
-      return;
-    }
-    patchInvoice(editInvoice);
-    updatePage();
-  };
+  // if(!invoice) redirect('/not-found')
+
+  // const [editInvoice, setEditInvoice] = useState(invoice)
+
+  // const onChangeType = (value: string) => {
+  //   setEditInvoice((prev) => ({ ...prev, type: value }));
+  // };
+
+  // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = event.target.value;
+  //   if (!isNaN(Number(value))) {
+  //     setEditInvoice((prev) => ({ ...prev, value: Number(value) }));
+  //   }
+  // };
+
+  // const updateInvoice = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   if (!editInvoice.type || editInvoice.value === 0) {
+  //     alert("Por favor, preencha todos os campos corretamente.");
+  //     return;
+  //   }
+  //   patchInvoice(editInvoice);
+  //   updatePage();
+  // };
+
+  useEffect(() => {
+    http.get<TransactionType[]>("transactions/types").then((response) => {
+      setTransactionTypes(response.data);
+    });
+  }, []);
 
   return (
     <div
@@ -62,11 +78,11 @@ export default function EditInvoice() {
       <div className="grid align-left py-4 lg:grid-cols-2">
         <div className="grid gap-6">
           <h1 className="text-h1 font-bold ">Editar Transação</h1>
-          <form className="grid gap-6" onSubmit={updateInvoice}>
+          <form className="grid gap-6" onSubmit={() => {}}>
             <DropdownMenu
-              selected={editInvoice.type}
-              setSelected={onChangeType}
-              options={["Depósito", "Saque", "Transferência"]}
+              selected={transactionType}
+              options={transactionTypes}
+              onChange={setTransactionType}
               placeholder="Selecione o tipo de transação"
             ></DropdownMenu>
             <div className="grid gap-2">
@@ -79,7 +95,7 @@ export default function EditInvoice() {
                 className="peer block w-[184px] h-[48px] cursor-pointer rounded-md border border-primary-400 py-2 pl-2 text-p text-center outline-2 text-primary-400"
                 placeholder="0"
                 defaultValue={editInvoice.value}
-                onChange={onChangeValue}
+                onChange={() => {}}
               />
             </div>
             <button
