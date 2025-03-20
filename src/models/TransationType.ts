@@ -3,7 +3,7 @@ export interface TransactionType {
   display: string;
 }
 
-enum TransactionTypeValue {
+export enum TransactionTypeValue {
   SAQUE = "saque",
   DEPOSITO = "deposito",
   TRANSFERENCIA = "transferencia",

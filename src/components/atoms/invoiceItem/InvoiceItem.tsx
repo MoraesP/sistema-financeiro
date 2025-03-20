@@ -1,6 +1,7 @@
 import { months } from "@/lib/consts";
 import { formatDate } from "@/lib/shared-functions";
 import { ITransaction } from "@/models/Transaction";
+import { TransactionTypeValue } from "@/models/TransationType";
 import { createContext } from "react";
 
 export type InvoiceItemProps = {
@@ -16,6 +17,16 @@ export function InvoiceItem({ transaction }: InvoiceItemProps) {
   // updatePage();
   // };
 
+  const formatTransactionType = (type: string): string => {
+    const typeMap: Record<TransactionTypeValue, string> = {
+      [TransactionTypeValue.SAQUE]: "Saque",
+      [TransactionTypeValue.DEPOSITO]: "Depósito",
+      [TransactionTypeValue.TRANSFERENCIA]: "Transferência",
+    };
+
+    return typeMap[type as TransactionTypeValue] || "Desconhecido";
+  };
+
   return (
     <InvoiceContext.Provider value={transaction.id}>
       <div className="flex flex-col border-b border-secondary-400 py-3">
@@ -24,7 +35,7 @@ export function InvoiceItem({ transaction }: InvoiceItemProps) {
         </small>
 
         <div className="flex flex-row justify-between items-center">
-          <p>{transaction.type}</p>
+          <p>{formatTransactionType(transaction.type)}</p>
           {/* <div className="flex gap-2">
             <Link
               href={{

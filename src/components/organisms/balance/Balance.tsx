@@ -19,6 +19,13 @@ export function Balance({ username, balance }: BalanceProps) {
   const toggleVisibility = () => {
     setIsVisible((prev) => !prev);
   };
+  
+  const formatCurrency = (value: number): string => {
+    return value.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
 
   return (
     <div
@@ -79,7 +86,7 @@ export function Balance({ username, balance }: BalanceProps) {
           id="valor"
           className="pt-[8px] text-[31px] self-start whitespace-nowrap"
         >
-          R$ {isVisible ? balance : "***"}
+          R$ {isVisible ? formatCurrency(balance) : "***"}
         </div>
       </div>
       <Image

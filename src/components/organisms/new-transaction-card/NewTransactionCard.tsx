@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import "./NewTransactionCard.styles.css";
 import { updatePage } from "@/lib/actions";
+import { Button } from "@/components/atoms/button/Button";
 
 export function NewTransactionCard() {
   const [transactionType, setTransactionType] = useState<TransactionType>({
@@ -25,7 +26,7 @@ export function NewTransactionCard() {
     http
       .post("transactions", {
         type: transactionType.value,
-        value: parseFloat(transactionValue),
+        value: parseFloat(transactionValue.replace(",", ".")),
       })
       .then((response) => {
         const newTransaction: ITransaction = {
@@ -66,6 +67,10 @@ export function NewTransactionCard() {
     setTransactionType({ display: "", value: null });
     setTransactionValue("");
   };
+
+  const isSubmitDisabled =
+    !transactionValue ||
+    !transactionTypes.some((type) => type.value === transactionType.value);
 
   useEffect(() => {
     http.get<TransactionType[]>("transactions/types").then((response) => {
@@ -108,20 +113,27 @@ export function NewTransactionCard() {
               <input
                 id="transaction-value"
                 name="transaction-value"
-                type="numeric"
-                step="0.01"
+                type="text"
                 className="peer block w-[184px] h-[48px] cursor-pointer rounded-md border border-primary-400 py-2 pl-2 text-p text-center outline-2 text-primary-400"
                 placeholder="0"
                 value={transactionValue}
-                onChange={(evt) => setTransactionValue(evt.target.value)}
+                onChange={(evt) => {
+                  const value = evt.target.value;
+                  if (/^\d*(,\d{0,2})?$/.test(value)) {
+                    setTransactionValue(value);
+                  }
+                }}
               />
             </div>
-            <button
+            <Button
+              variant={isSubmitDisabled ? "tertiary" : "primary"}
+              buttonType={"regular"}
+              disabled={isSubmitDisabled}
+              customClass="w-[50%] h-[43px] py-2 pl-2 text-p outline-2 font-bold"
               type="submit"
-              className="peer block w-[184px] h-[43px] cursor-pointer rounded-md border border-primary-400 bg-primary-400 py-2 pl-2 text-p outline-2 font-bold text-white"
             >
               Concluir Transação
-            </button>
+            </Button>
           </form>
         </div>
         <div className="lg:col-start-2">
