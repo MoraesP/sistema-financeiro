@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import store from "@/store/store";
 import { Inter } from "next/font/google";
 import { Provider } from "react-redux"; // Importando o Provider do Redux
 import "./globals.css";
+import { store } from "@/store/store";
 
 export const experimental_ppr = true;
 

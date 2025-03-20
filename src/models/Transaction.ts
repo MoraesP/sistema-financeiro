@@ -2,7 +2,7 @@ export interface ITransaction {
   id: string;
   value: number;
   type: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface DBTransaction {

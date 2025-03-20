@@ -5,9 +5,11 @@ import { Balance } from "@/components/organisms/balance/Balance";
 import { Invoice } from "@/components/organisms/invoice/Invoice";
 import { Nav } from "@/components/organisms/nav/Nav";
 import http from "@/http";
-import { DBTransaction, ITransaction } from "@/models/Transaction";
-import { RootState, setUser } from "@/store/store";
-import { useEffect, useState } from "react";
+import { fetchBalance } from "@/store/slices/balanceSlice";
+import { fetchTransactions } from "@/store/slices/transactionsSlice";
+import { setUser } from "@/store/slices/userSlice";
+import { AppDispatch, RootState } from "@/store/store";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Layout({
@@ -15,11 +17,16 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [transactions, setTransactions] = useState<ITransaction[]>([]);
-  const [balance, setBalance] = useState<number>(0);
-  const dispatch = useDispatch();
+  // const [transactions, setTransactions] = useState<ITransaction[]>([]);
+  // const [balance, setBalance] = useState<number>(0);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const user = useSelector((state: RootState) => state.user.user);
+  const transactions = useSelector(
+    (state: RootState) => state.transactions.transactions
+  );
+  const balance = useSelector((state: RootState) => state.balance.balance);
 
   if (!user) {
     http
@@ -32,41 +39,21 @@ export default function Layout({
       });
   }
 
-  function fetchTransactions() {
-    http
-      .get("transactions")
-      .then((response) => {
-        setTransactions(
-          response.data.map((transaction: DBTransaction) => {
-            return {
-              id: transaction._id,
-              type: transaction.type,
-              value: transaction.value,
-              createdAt: new Date(transaction.createdAt),
-            };
-          })
-        );
-      })
-      .catch((error) => {
-        console.error("Ocorreu um erro ao buscar as transações", error);
-      });
-  }
-
-  function fetchBalance() {
-    http
-      .get("transactions/balance")
-      .then((response) => {
-        setBalance(response.data.balance);
-      })
-      .catch((error) => {
-        console.error("Ocorreu um erro ao buscar o saldo", error);
-      });
-  }
+  // function fetchBalance() {
+  //   http
+  //     .get("transactions/balance")
+  //     .then((response) => {
+  //       setBalance(response.data.balance);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Ocorreu um erro ao buscar o saldo", error);
+  //     });
+  // }
 
   useEffect(() => {
-    fetchTransactions();
-    fetchBalance();
-  }, []);
+    dispatch(fetchTransactions());
+    dispatch(fetchBalance());
+  }, [dispatch]);
 
   return (
     <main className="h-full w-full">

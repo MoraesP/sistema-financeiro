@@ -31,7 +31,7 @@ export function InvoiceItem({ transaction }: InvoiceItemProps) {
     <InvoiceContext.Provider value={transaction.id}>
       <div className="flex flex-col border-b border-secondary-400 py-3">
         <small className="text-secondary-400 font-bold pb-1">
-          {months[transaction.createdAt.getMonth()]}
+          {months[new Date(transaction.createdAt).getMonth()]}
         </small>
 
         <div className="flex flex-row justify-between items-center">
@@ -51,7 +51,7 @@ export function InvoiceItem({ transaction }: InvoiceItemProps) {
         <div className="flex flex-row justify-between items-center">
           <p className="font-bold">R$ {transaction.value}</p>
           <small className="text-gray-600">
-            {formatDate(transaction.createdAt)}
+            {formatDate(new Date(transaction.createdAt))}
           </small>
         </div>
       </div>

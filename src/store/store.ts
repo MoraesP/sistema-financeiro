@@ -1,35 +1,15 @@
-// src/store/store.ts
-
-import { User } from "@/models/User";
 import { configureStore } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import userReducer from "./slices/userSlice";
+import transactionsReducer from "./slices/transactionsSlice";
+import balanceReducer from "./slices/balanceSlice";
 
-// Definindo um exemplo de slice de estado (você pode modificar conforme necessário)
-const initialState = {
-  user: null as User | null,
-};
-
-const userSlice = createSlice({
-  name: "user",
-  initialState,
-  reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
-    logout: (state) => {
-      state.user = null;
-    },
-  },
-});
-
-export const { setUser, logout } = userSlice.actions;
-
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    user: userSlice.reducer,
+    user: userReducer,
+    transactions: transactionsReducer,
+    balance: balanceReducer,
   },
 });
-
-export default store;
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

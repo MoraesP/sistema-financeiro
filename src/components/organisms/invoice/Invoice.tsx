@@ -2,44 +2,57 @@
 
 import { InvoiceItem } from "@/components/atoms/invoiceItem/InvoiceItem";
 import { ITransaction } from "@/models/Transaction";
-import { useEffect, useRef, useState } from "react";
 
 export type TransactionProps = {
   transactions: ITransaction[];
 };
 
 export function Invoice({ transactions }: TransactionProps) {
-  const [visibleTransactions, setVisibleTransactions] = useState<
-    ITransaction[]
-  >([]);
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
-  const containerRef = useRef<HTMLDivElement>(null);
+  // const [visibleTransactions, setVisibleTransactions] = useState<
+  //   ITransaction[]
+  // >([]);
+  // const [page, setPage] = useState(1);
+  // const itemsPerPage = 10;
+  // const containerRef = useRef<HTMLDivElement>(null);
 
-  const sortedTransactions = transactions?.sort((a, b) => {
+  const sortedTransactions = [...transactions].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  useEffect(() => {
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = page * itemsPerPage;
-    const newTransactions = sortedTransactions.slice(startIndex, endIndex);
+  // useEffect(() => {
+  //   // Quando a lista de transações for atualizada, reinicializa a página
+  //   setPage(1);
+  //   setVisibleTransactions(sortedTransactions.slice(0, itemsPerPage)); // Carrega as transações da primeira página
+  // }, [transactions]); //
 
-    setVisibleTransactions((prevTransactions) => [
-      ...prevTransactions,
-      ...newTransactions,
-    ]);
-    
-  }, [page, transactions, sortedTransactions]);
+  // useEffect(() => {
+  //   // Calcula o índice inicial e final
+  //   const startIndex = (page - 1) * itemsPerPage;
+  //   const endIndex = page * itemsPerPage;
 
-  const handleScroll = () => {
-    if (containerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        setPage((prevPage) => prevPage + 1);
-      }
-    }
-  };
+  //   // Pega as transações da página atual
+  //   const newTransactions = sortedTransactions.slice(startIndex, endIndex);
+
+  //   // Atualiza o estado de transações visíveis sem duplicar
+  //   setVisibleTransactions((prevTransactions) => {
+  //     // Só adiciona as novas transações se elas ainda não estiverem na lista
+  //     const allVisibleTransactions = new Set([
+  //       ...prevTransactions,
+  //       ...newTransactions,
+  //     ]);
+
+  //     return Array.from(allVisibleTransactions);
+  //   });
+  // }, [page, sortedTransactions]);
+
+  // const handleScroll = () => {
+  //   if (containerRef.current) {
+  //     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+  //     if (scrollTop + clientHeight >= scrollHeight - 10) {
+  //       setPage((prevPage) => prevPage + 1);
+  //     }
+  //   }
+  // };
 
   return (
     <div
@@ -55,10 +68,10 @@ export function Invoice({ transactions }: TransactionProps) {
         id="lista"
         className="overflow-y-auto pr-6"
         style={{ height: "calc(100% - 35px)" }}
-        ref={containerRef}
-        onScroll={handleScroll}
+        // ref={containerRef}
+        // onScroll={handleScroll}
       >
-        {visibleTransactions?.map((transaction) => (
+        {sortedTransactions?.map((transaction) => (
           <InvoiceItem key={transaction.id} transaction={transaction} />
         ))}
       </div>

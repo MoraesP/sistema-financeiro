@@ -1,14 +1,15 @@
 "use client";
 
+import { Button } from "@/components/atoms/button/Button";
 import DropdownMenu from "@/components/moleculas/dropdown-menu/DropdownMenu";
-import { ITransaction } from "@/models/Transaction";
 import { TransactionType } from "@/models/TransationType";
+import { addTransaction } from "@/store/slices/transactionsSlice";
+import { AppDispatch } from "@/store/store";
 import http from "@http";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import "./NewTransactionCard.styles.css";
-import { updatePage } from "@/lib/actions";
-import { Button } from "@/components/atoms/button/Button";
 
 export function NewTransactionCard() {
   const [transactionType, setTransactionType] = useState<TransactionType>({
@@ -16,29 +17,34 @@ export function NewTransactionCard() {
     value: null,
   });
   const [transactionValue, setTransactionValue] = useState("");
-
   const [transactionTypes, setTransactionTypes] = useState<TransactionType[]>(
     []
   );
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const createTransacion = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    http
-      .post("transactions", {
-        type: transactionType.value,
-        value: parseFloat(transactionValue.replace(",", ".")),
-      })
-      .then((response) => {
-        const newTransaction: ITransaction = {
-          id: response.data._id,
-          type: response.data.type,
-          value: response.data.value,
-          createdAt: new Date(response.data.createdAt),
-        };
-        console.log(newTransaction);
-        updatePage();
-        resetForm();
-      });
+    const value = parseFloat(transactionValue.replace(",", "."));
+    if (!transactionType.value || isNaN(value)) return;
+    dispatch(addTransaction({ type: transactionType.value, value }));
+    resetForm();
+    // http
+    //   .post("transactions", {
+    //     type: transactionType.value,
+    //     value: parseFloat(transactionValue.replace(",", ".")),
+    //   })
+    //   .then((response) => {
+    //     const newTransaction: ITransaction = {
+    //       id: response.data._id,
+    //       type: response.data.type,
+    //       value: response.data.value,
+    //       createdAt: new Date(response.data.createdAt),
+    //     };
+    //     console.log(newTransaction);
+    //     updatePage();
+    //     resetForm();
+    //   });
   };
 
   // const onChangeType = (value: string) => {

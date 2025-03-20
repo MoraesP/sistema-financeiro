@@ -5,7 +5,7 @@ import { FormLogin } from "../form-login/FormLogin";
 import Modal from "../modal/Modal";
 import http from "@/http";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/store";
+import { setUser } from "@/store/slices/userSlice";
 
 export const ModalLogin = () => {
   const [isModalOpen, setModalOpen] = useState(false);
