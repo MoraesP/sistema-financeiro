@@ -1,17 +1,14 @@
 "use client";
 
-import { Button } from "@/components/atoms/button/Button";
 import { HamburgerMenuIcon } from "@/components/icons/HamburgerMenuIcon";
 import { Logo } from "@/components/icons/Logo";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ModalLogin } from "../modal-login/ModalLogin";
+import { ModalRegister } from "../modal-register/ModalRegister";
 
 export const experimental_ppr = true;
 
 export function UnauthenticatedHeader() {
-  const router = useRouter();
-
   function handleMenuClick() {
     console.log("click");
   }
@@ -40,17 +37,8 @@ export function UnauthenticatedHeader() {
             </li>
           </ul>
           <div className="flex gap-8">
-            <Button buttonType="regular" variant="secondary">
-              Abrir minha conta
-            </Button>
+            <ModalRegister />
             <ModalLogin />
-            <Button
-              buttonType="outlined"
-              variant="secondary"
-              onClick={() => router.push("/dashboard")}
-            >
-              Já tenho conta
-            </Button>
           </div>
         </nav>
       </section>
