@@ -22,12 +22,10 @@ export default function Layout({
   const user = useSelector((state: RootState) => state.user.user);
 
   if (!user) {
-    console.log("Preciso procurar usuário");
     http
       .get("auth/profile")
       .then((response) => {
         dispatch(setUser(response.data));
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Usuário não encontrado", error);

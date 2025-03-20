@@ -25,7 +25,6 @@ export const FormRegister = ({ onRegister }: FormRegisterProps) => {
 
   const registerUser = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    console.log(user);
     // http.post("/users", user).then(() => onRegister());
     onRegister();
   };

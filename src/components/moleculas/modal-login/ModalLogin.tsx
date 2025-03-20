@@ -17,7 +17,6 @@ export const ModalLogin = () => {
       .get("auth/profile")
       .then((response) => {
         dispatch(setUser(response.data));
-        console.log(response.data);
         router.push("/dashboard");
       })
       .catch((error) => {

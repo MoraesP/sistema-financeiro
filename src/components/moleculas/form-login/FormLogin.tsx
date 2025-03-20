@@ -22,6 +22,7 @@ export const FormLogin = ({ onLogin }: FormLoginProps) => {
     evt.preventDefault();
     http.post("auth/token", credentials).then((response) => {
       sessionStorage.setItem("token", response.data.accessToken);
+      document.cookie = `token=${response.data.accessToken}; path=/; max-age=3600`;
       onLogin();
     });
   };
