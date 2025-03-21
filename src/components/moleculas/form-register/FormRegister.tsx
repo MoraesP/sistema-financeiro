@@ -92,7 +92,7 @@ export const FormRegister = ({ onRegister }: FormRegisterProps) => {
         </div>
         <footer className="w-full flex justify-center gap-4">
           <Button
-            variant={isChecked ? "tertiary" : "primary"}
+            variant={isChecked ? "primary" : "disabled"}
             buttonType={"regular"}
             disabled={!isChecked}
             type="submit"

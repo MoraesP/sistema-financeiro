@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
-export type Variant = "primary" | "secondary" | "tertiary";
+export type Variant = "primary" | "secondary" | "tertiary" | "disabled";
 
 export type ButtonType = "outlined" | "regular" | "transparent";
 

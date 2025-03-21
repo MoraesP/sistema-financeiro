@@ -11,3 +11,14 @@ export const formatDate = (date: Date): string => {
 
   return formattedDate;
 };
+
+export const formatMonthYear = (date: Date): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    month: "2-digit",
+    year: "numeric",
+  };
+
+  const formattedDate = new Intl.DateTimeFormat("pt-BR", options).format(date);
+
+  return formattedDate;
+};

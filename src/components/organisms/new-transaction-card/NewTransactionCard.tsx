@@ -132,7 +132,7 @@ export function NewTransactionCard() {
               />
             </div>
             <Button
-              variant={isSubmitDisabled ? "tertiary" : "primary"}
+              variant={isSubmitDisabled ? "disabled" : "primary"}
               buttonType={"regular"}
               disabled={isSubmitDisabled}
               customClass="w-[50%] h-[43px] py-2 pl-2 text-p outline-2 font-bold"
