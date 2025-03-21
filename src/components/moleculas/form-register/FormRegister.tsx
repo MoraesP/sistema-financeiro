@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/atoms/button/Button";
 import Image from "next/image";
-// import http from "@http";
+import http from "@http";
 
 interface FormRegisterProps {
   onRegister: () => void;
@@ -25,7 +25,7 @@ export const FormRegister = ({ onRegister }: FormRegisterProps) => {
 
   const registerUser = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    // http.post("/users", user).then(() => onRegister());
+    http.post("/users", user).then(() => onRegister());
     onRegister();
   };
 

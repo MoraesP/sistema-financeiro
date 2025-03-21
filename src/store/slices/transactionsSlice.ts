@@ -3,7 +3,6 @@ import { DBTransaction, ITransaction } from "@/models/Transaction";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchBalance } from "./balanceSlice";
 
-// Async thunk para buscar transações do backend
 export const fetchTransactions = createAsyncThunk(
   "fetchTransactions",
   async () => {
@@ -17,13 +16,12 @@ export const fetchTransactions = createAsyncThunk(
   }
 );
 
-// Async thunk para criar uma nova transação e buscar a lista atualizada
 export const addTransaction = createAsyncThunk(
   "addTransaction",
   async ({ type, value }: { type: string; value: number }, { dispatch }) => {
     await http.post("transactions", { type, value });
     dispatch(fetchTransactions());
-    dispatch(fetchBalance()); // Atualiza a lista após adicionar
+    dispatch(fetchBalance());
   }
 );
 

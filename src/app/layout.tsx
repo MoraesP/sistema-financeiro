@@ -2,7 +2,7 @@
 
 import { store } from "@/store/store";
 import { Inter } from "next/font/google";
-import { Provider } from "react-redux"; // Importando o Provider do Redux
+import { Provider } from "react-redux";
 import "@styles/globals.css";
 
 const inter = Inter({
@@ -11,10 +11,6 @@ const inter = Inter({
   display: "swap",
 });
 
-// export const metadata: Metadata = {
-//   title: "Sistema Financeiro - P. Moraes",
-//   description: "Postech da FIAP",
-// };
 
 export default function RootLayout({
   children,

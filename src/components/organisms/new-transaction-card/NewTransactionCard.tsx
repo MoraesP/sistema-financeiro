@@ -29,45 +29,7 @@ export function NewTransactionCard() {
     if (!transactionType.value || isNaN(value)) return;
     dispatch(addTransaction({ type: transactionType.value, value }));
     resetForm();
-    // http
-    //   .post("transactions", {
-    //     type: transactionType.value,
-    //     value: parseFloat(transactionValue.replace(",", ".")),
-    //   })
-    //   .then((response) => {
-    //     const newTransaction: ITransaction = {
-    //       id: response.data._id,
-    //       type: response.data.type,
-    //       value: response.data.value,
-    //       createdAt: new Date(response.data.createdAt),
-    //     };
-    //     console.log(newTransaction);
-    //     updatePage();
-    //     resetForm();
-    //   });
   };
-
-  // const onChangeType = (value: string) => {
-  //   setNewInvoice((prev) => ({ ...prev, type: value }));
-  // };
-
-  // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = event.target.value;
-  //   if (!isNaN(Number(value))) {
-  //     setNewInvoice((prev) => ({ ...prev, value: Number(value) }));
-  //   }
-  // };
-
-  // const createInvoice = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   if (!newInvoice.type || newInvoice.value === 0) {
-  //     alert("Por favor, preencha todos os campos corretamente.");
-  //     return;
-  //   }
-  //   postInvoice(newInvoice);
-  //   updatePage();
-  //   resetForm();
-  // };
 
   const resetForm = () => {
     setTransactionType({ display: "", value: null });

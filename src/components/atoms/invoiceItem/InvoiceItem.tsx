@@ -11,12 +11,6 @@ export type InvoiceItemProps = {
 export const InvoiceContext = createContext({});
 
 export function InvoiceItem({ transaction }: InvoiceItemProps) {
-  // const deleteInvoice = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  // useDeleteInvoice(transaction.id);
-  // updatePage();
-  // };
-
   const formatTransactionType = (type: string): string => {
     const typeMap: Record<TransactionTypeValue, string> = {
       [TransactionTypeValue.SAQUE]: "Saque",
@@ -36,17 +30,6 @@ export function InvoiceItem({ transaction }: InvoiceItemProps) {
 
         <div className="flex flex-row justify-between items-center">
           <p>{formatTransactionType(transaction.type)}</p>
-          {/* <div className="flex gap-2">
-            <Link
-              href={{
-                pathname: `/dashboard/invoices/${transaction.id}/edit`,
-                query: `${transaction.id}`,
-              }}
-            >
-              <ButtonIcon Icon={EditIcon} />
-            </Link>
-            <ButtonIcon Icon={TrashIcon} onClickIcon={deleteInvoice} />
-          </div> */}
         </div>
         <div className="flex flex-row justify-between items-center">
           <p className="font-bold">R$ {transaction.value}</p>

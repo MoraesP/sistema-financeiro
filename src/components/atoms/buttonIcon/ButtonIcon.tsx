@@ -1,11 +1,12 @@
 type ButtonIconProps = {
-  Icon: Icon;
+  Icon(): JSX.Element;
   onClickIcon?: () => void;
-}
+};
 
-export function ButtonIcon({Icon, onClickIcon}: ButtonIconProps) {
+export function ButtonIcon({ Icon, onClickIcon }: ButtonIconProps) {
   return (
-    <button className={`
+    <button
+      className={`
       w-[30px]
       h-[30px]
       flex
@@ -16,8 +17,7 @@ export function ButtonIcon({Icon, onClickIcon}: ButtonIconProps) {
       rounded-full 
       hover:bg-primary-600
     `}
-
-    onClick={onClickIcon}
+      onClick={onClickIcon}
     >
       <Icon />
     </button>

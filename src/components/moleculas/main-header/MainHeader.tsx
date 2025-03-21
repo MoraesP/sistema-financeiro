@@ -36,7 +36,6 @@ export function MainHeader({ user }: MainHeaderProps) {
   };
 
   function clearCookies() {
-    // Itera sobre todos os cookies do document
     document.cookie.split(";").forEach((cookie) => {
       const cookieName = cookie.split("=")[0].trim();
       document.cookie = `${cookieName}=; max-age=0; path=/;`;
