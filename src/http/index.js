@@ -17,4 +17,18 @@ http.interceptors.request.use(
   }
 );
 
+http.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response && error.response.status === 401) {
+      // Se o token estiver expirado ou inválido, redirecionar o usuário para a página de login
+      sessionStorage.removeItem("token"); // Remover o token inválido
+      window.location.href = "/"; // Redirecionar para a página de login
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default http;

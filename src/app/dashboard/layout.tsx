@@ -9,7 +9,6 @@ import { fetchBalance } from "@/store/slices/balanceSlice";
 import { fetchTransactions } from "@/store/slices/transactionsSlice";
 import { setUser } from "@/store/slices/userSlice";
 import { AppDispatch, RootState } from "@/store/store";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,7 +18,6 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
 
   const user = useSelector((state: RootState) => state.user.user);
   const balance = useSelector((state: RootState) => state.balance.balance);
@@ -34,7 +32,6 @@ export default function Layout({
         dispatch(setUser(response.data));
       })
       .catch((error) => {
-        router.push("/");
         console.error("Usuário não encontrado", error);
       });
   }
