@@ -4,10 +4,18 @@ import { HamburguerIcon } from "@/components/icons/HamburguerIcon";
 import { UserIcon } from "@/components/icons/UserIcon";
 import { useEffect, useRef, useState } from "react";
 import { ContextualMenu } from "../ContextualMenu/ContextualMenu";
+import { User } from "@/models/User";
+import { Button } from "@/components/atoms/button/Button";
+import { useRouter } from "next/navigation";
 
-export function MainHeader() {
+export type MainHeaderProps = {
+  user: User | null;
+};
+
+export function MainHeader({ user }: MainHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -20,6 +28,20 @@ export function MainHeader() {
       setIsMenuOpen(false);
     }
   };
+
+  const onLogout = () => {
+    sessionStorage.removeItem("token");
+    clearCookies();
+    router.push("/");
+  };
+
+  function clearCookies() {
+    // Itera sobre todos os cookies do document
+    document.cookie.split(";").forEach((cookie) => {
+      const cookieName = cookie.split("=")[0].trim();
+      document.cookie = `${cookieName}=; max-age=0; path=/;`;
+    });
+  }
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -49,7 +71,15 @@ export function MainHeader() {
           )}
         </div>
         <div className="md:ml-auto flex items-center gap-8">
-          <p className="hidden text-white md:block">Joana da Silva Oliveira</p>
+          <p className="hidden text-white md:block">{user ? user.name : ""}</p>
+          <Button
+            variant={"tertiary"}
+            buttonType={"regular"}
+            customClass="hidden md:block"
+            onClick={onLogout}
+          >
+            Sair
+          </Button>
           <UserIcon size={40} />
         </div>
       </nav>

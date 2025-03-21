@@ -9,6 +9,7 @@ import { fetchBalance } from "@/store/slices/balanceSlice";
 import { fetchTransactions } from "@/store/slices/transactionsSlice";
 import { setUser } from "@/store/slices/userSlice";
 import { AppDispatch, RootState } from "@/store/store";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,16 +18,14 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const [transactions, setTransactions] = useState<ITransaction[]>([]);
-  // const [balance, setBalance] = useState<number>(0);
-
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   const user = useSelector((state: RootState) => state.user.user);
+  const balance = useSelector((state: RootState) => state.balance.balance);
   const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
   );
-  const balance = useSelector((state: RootState) => state.balance.balance);
 
   if (!user) {
     http
@@ -35,20 +34,10 @@ export default function Layout({
         dispatch(setUser(response.data));
       })
       .catch((error) => {
+        router.push("/");
         console.error("Usuário não encontrado", error);
       });
   }
-
-  // function fetchBalance() {
-  //   http
-  //     .get("transactions/balance")
-  //     .then((response) => {
-  //       setBalance(response.data.balance);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Ocorreu um erro ao buscar o saldo", error);
-  //     });
-  // }
 
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -57,7 +46,7 @@ export default function Layout({
 
   return (
     <main className="h-full w-full">
-      <MainHeader />
+      <MainHeader user={user} />
       <div className="grid gap-6 mt-6 place-self-center lg:grid-cols-[180px_1fr_280px] lg:max-w-[1320px] w-full lg:px-[60px] md:px-[60px] px-6">
         <Nav />
         <div className="grid gap-y-6 w-full">
