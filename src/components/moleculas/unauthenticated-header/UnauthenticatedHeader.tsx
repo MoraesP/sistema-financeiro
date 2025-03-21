@@ -6,8 +6,6 @@ import Link from "next/link";
 import { ModalLogin } from "../modal-login/ModalLogin";
 import { ModalRegister } from "../modal-register/ModalRegister";
 
-export const experimental_ppr = true;
-
 export function UnauthenticatedHeader() {
   function handleMenuClick() {
     console.log("click");

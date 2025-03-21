@@ -5,8 +5,6 @@ import { Provider } from "react-redux"; // Importando o Provider do Redux
 import "./globals.css";
 import { store } from "@/store/store";
 
-export const experimental_ppr = true;
-
 const inter = Inter({
   subsets: ["latin"],
   variable: "--inter-font-sans",
