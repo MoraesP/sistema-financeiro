@@ -46,7 +46,7 @@ export const FormRegister = ({ onRegister }: FormRegisterProps) => {
           <label className="block font-bold text-lg mb-2">Nome</label>
           <input
             className="w-full text-lg p-4 border border-[#DEE9EA] rounded-lg"
-            name="email"
+            name="name"
             type="text"
             placeholder="Digite seu nome completo"
             value={user.name}

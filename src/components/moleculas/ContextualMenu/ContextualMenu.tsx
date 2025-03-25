@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export type ContextualMenuProps = {
   isMenuOpen: boolean;
@@ -10,13 +10,38 @@ export type ContextualMenuProps = {
 
 export function ContextualMenu({ isMenuOpen, onClose }: ContextualMenuProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const navItems = [
     { href: "/dashboard", label: "Início" },
     { href: "/dashboard/exchanges", label: "Transferências" },
     { href: "/dashboard/investments", label: "Investimentos" },
     { href: "/dashboard/other-services", label: "Outros Serviços" },
+    { href: "/", label: "Sair" },
   ];
+
+  const onLogout = () => {
+    sessionStorage.removeItem("token");
+    clearCookies();
+    router.push("/");
+  };
+
+  function clearCookies() {
+    document.cookie.split(";").forEach((cookie) => {
+      const cookieName = cookie.split("=")[0].trim();
+      document.cookie = `${cookieName}=; max-age=0; path=/;`;
+    });
+  }
+
+  const itemActive = (item: { href: string; label: string }) => {
+    if (item.href === "/") {
+      return false;
+    } else {
+      return (
+        pathname.startsWith(item.href) && !pathname.startsWith(`${item.href}/`)
+      );
+    }
+  };
 
   return (
     <div className="relative">
@@ -26,9 +51,7 @@ export function ContextualMenu({ isMenuOpen, onClose }: ContextualMenuProps) {
           role="menu"
         >
           {navItems.map((item, index) => {
-            const isActive =
-              pathname.startsWith(item.href) &&
-              !pathname.startsWith(`${item.href}/`);
+            const isActive = itemActive(item);
 
             return (
               <li
@@ -46,7 +69,13 @@ export function ContextualMenu({ isMenuOpen, onClose }: ContextualMenuProps) {
                 <Link
                   href={item.href}
                   className="py-4 w-full"
-                  onClick={onClose}
+                  onClick={() => {
+                    if (item.href === "/") {
+                      onLogout();
+                    } else {
+                      onClose();
+                    }
+                  }}
                 >
                   {item.label}
                 </Link>

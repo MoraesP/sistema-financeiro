@@ -29,8 +29,8 @@ COPY --from=builder /app/package.json ./package.json
 # Instala apenas as dependências de produção
 RUN npm install --production
 
-# Expõe a porta 4200
-EXPOSE 4200
+# Expõe a porta 3000
+EXPOSE 3000
 
-# Comando para iniciar o servidor Next.js na porta 4200
-CMD ["npm", "run", "start", "--", "-p", "4200"]
+# Comando para iniciar o servidor Next.js na porta 3001
+CMD ["npm", "run", "start"]
