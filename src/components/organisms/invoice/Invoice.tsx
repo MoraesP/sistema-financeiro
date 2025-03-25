@@ -4,7 +4,10 @@ import { InvoiceItem } from "@/components/atoms/invoiceItem/InvoiceItem";
 import DropdownMenu from "@/components/moleculas/dropdown-menu/DropdownMenu";
 import http from "@/http";
 import { ITransaction } from "@/models/Transaction";
-import { TransactionType, TransactionTypeValue } from "@/models/TransationType";
+import {
+  TransactionType,
+  TransactionTypeFilterValue,
+} from "@/models/TransationType";
 import { useEffect, useState } from "react";
 
 export type TransactionProps = {
@@ -16,26 +19,27 @@ export function Invoice({ transactions }: TransactionProps) {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  const [transactionType, setTransactionType] = useState<TransactionType>({
-    display: "Todas",
-    value: TransactionTypeValue.TODAS,
-  });
+  const [transactionTypeFilter, setTransactionTypeFilter] =
+    useState<TransactionType>({
+      display: "Todas",
+      value: TransactionTypeFilterValue.TODAS,
+    });
 
-  const [transactionTypes, setTransactionTypes] = useState<TransactionType[]>(
-    []
-  );
+  const [transactionTypesFilter, setTransactionTypesFilter] = useState<
+    TransactionType[]
+  >([]);
 
   const filteredTransactions = sortedTransactions.filter((transaction) => {
-    if (transactionType.value === TransactionTypeValue.TODAS) {
+    if (transactionTypeFilter.value === TransactionTypeFilterValue.TODAS) {
       return true;
     }
-    return transaction.type === transactionType.value;
+    return transaction.type === transactionTypeFilter.value;
   });
 
   useEffect(() => {
     http.get<TransactionType[]>("transactions/types").then((response) => {
-      setTransactionTypes([
-        { display: "Todas", value: TransactionTypeValue.TODAS },
+      setTransactionTypesFilter([
+        { display: "Todas", value: TransactionTypeFilterValue.TODAS },
         ...response.data,
       ]);
     });
@@ -50,9 +54,9 @@ export function Invoice({ transactions }: TransactionProps) {
       <div className="pr-6 pb-6">
         <DropdownMenu
           width="auto"
-          selected={transactionType}
-          options={transactionTypes}
-          onChange={setTransactionType}
+          selected={transactionTypeFilter}
+          options={transactionTypesFilter}
+          onChange={setTransactionTypeFilter}
           placeholder="Selecione o tipo de transação"
         ></DropdownMenu>
       </div>

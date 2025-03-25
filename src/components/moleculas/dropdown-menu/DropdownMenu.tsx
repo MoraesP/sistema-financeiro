@@ -1,7 +1,9 @@
 "use client";
 
 import { ArrowDownIcon } from "@/components/icons/ArrowDownIcon";
-import { TransactionType } from "@/models/TransationType";
+import {
+  TransactionType,
+} from "@/models/TransationType";
 import { useEffect, useRef, useState } from "react";
 import "./DropdownMenu.styles.css";
 
