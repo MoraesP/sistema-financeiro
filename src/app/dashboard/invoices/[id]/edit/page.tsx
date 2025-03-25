@@ -18,37 +18,6 @@ export default function EditInvoice() {
     []
   );
 
-  // const idParam = useSearchParams();
-  // const id = idParam.get("id") || "";
-  // const { useGetInvoice, usePatchInvoice } = useInvoiceProvider();
-  // const patchInvoice = usePatchInvoice;
-  // const invoice = useGetInvoice(id);
-
-  // if(!invoice) redirect('/not-found')
-
-  // const [editInvoice, setEditInvoice] = useState(invoice)
-
-  // const onChangeType = (value: string) => {
-  //   setEditInvoice((prev) => ({ ...prev, type: value }));
-  // };
-
-  // const onChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = event.target.value;
-  //   if (!isNaN(Number(value))) {
-  //     setEditInvoice((prev) => ({ ...prev, value: Number(value) }));
-  //   }
-  // };
-
-  // const updateInvoice = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   if (!editInvoice.type || editInvoice.value === 0) {
-  //     alert("Por favor, preencha todos os campos corretamente.");
-  //     return;
-  //   }
-  //   patchInvoice(editInvoice);
-  //   updatePage();
-  // };
-
   useEffect(() => {
     http.get<TransactionType[]>("transactions/types").then((response) => {
       setTransactionTypes(response.data);

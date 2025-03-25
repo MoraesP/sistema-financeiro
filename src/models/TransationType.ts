@@ -7,4 +7,5 @@ export enum TransactionTypeValue {
   SAQUE = "saque",
   DEPOSITO = "deposito",
   TRANSFERENCIA = "transferencia",
+  TODAS = "todas",
 }
